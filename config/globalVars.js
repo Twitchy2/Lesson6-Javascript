@@ -3,4 +3,5 @@
 
 module.exports = {
   db: 'mongodb://localhost/test'
+  //db: 'MLabs databse goes here'
 }

@@ -54,5 +54,72 @@ router.post('/add', function(req,res,next) {
     //redirect to updated teams view
 
 });
+//get
+router.get('/delete/:id', function(req,res,next) {
+  //get id parameter
+  var id = req.params.id;
+
+  //render
+  Team.remove ( {
+    _id: id
+  }, function(err) {
+    if (err) {
+    console.log(err);
+    res.render('/error');
+  }
+  else {
+      res.redirect('/teams');
+    }
+  });
+});
+
+//get edit page
+
+router.get('/:id', function(req,res,next) {
+              //get teams
+              var id = req.params.id;
+
+              Team.findById(id, function(err, team) {
+                if (err) {
+                  console.log(err);
+                  res.render('error');
+                }
+                else {
+
+              //load it
+              res.render('edit-teams', {
+                title: 'Team Details',
+                team: team
+              });
+            }
+          });
+        });
+
+      //post time
+router.post('/:id', function(req,res,next) {
+        //get id
+        var id = req.params.id;
+
+        //create a new team    object and populate
+        var team = new Team( {
+          _id: id,
+          city: req.body.city,
+          nickname: req.body.nickname,
+          wins: req.body.wins,
+          losses: req.body.losses
+        });
+        //try to updated
+        Team.update({
+          _id: id }, team, function(err) {
+            if (err) {
+              console.log(err);
+              res.render('/error');
+            }
+            else {
+              res.redirect('/teams');
+            }
+          })
+      });
+
 
 module.exports = router;
